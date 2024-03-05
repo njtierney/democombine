@@ -1,0 +1,55 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# democombine
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of democombine is to demonstrate an issue with using `dplyr::combine()` when you have your own `combine` function method.
+
+## Installation
+
+You can install the development version of democombine from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("njtierney/democombine")
+```
+
+## Example of issue
+
+```{r}
+library(democombine)
+
+x <- my_class(1:10)
+y <- my_class(20:10)
+
+x
+y
+
+combine(x, y)
+```
+
+So that works fine, but then if you load dplyr, you get a namespace conflict, which overwrites the S3 method:
+
+```{r}
+library(dplyr)
+
+combine(x, y)
+```
+
+You can resolve this with `conflicted`. But I'm wondering if there's a way to force `dplyr::combine` to be turned into an S3 method so we can use our own `combine` method?
+
